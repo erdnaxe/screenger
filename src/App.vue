@@ -33,6 +33,11 @@ export default Vue.extend({
 @import "~bulma/sass/utilities/_all";
 
 // Custom colors
+$primary: #895ad6;
+$body-background-color: darken($grey-darker, 4);
+$text: #fff;
+$text-light: lighten($text, 10);
+$text-strong: darken($text, 5);
 
 // Import Bulma and Buefy styles
 @import "~bulma";

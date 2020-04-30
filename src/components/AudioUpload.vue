@@ -8,12 +8,15 @@
         <div class="content has-text-centered">
           <p>
             <b-icon
-              icon="upload"
+              icon="download"
               size="is-large"
             >
             </b-icon>
           </p>
-          <p>Drop your files here or click to upload</p>
+          <p>
+            Drop your songs here<br />
+            <small>or click to upload and start playing</small>
+          </p>
         </div>
       </section>
     </b-upload>
