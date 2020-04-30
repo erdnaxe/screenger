@@ -1,24 +1,15 @@
-# screenger
+[![Netlify Status](https://api.netlify.com/api/v1/badges/e3b6223f-65f4-4de2-a70a-72ffbac3dc68/deploy-status)](https://app.netlify.com/sites/screenger/deploys)
 
-## Project setup
-```
-npm install
-```
+# Screenger
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+Make your screen sing!
 
-### Compiles and minifies for production
+## Development
+
+This project is using vue-cli.
+
 ```
-npm run build
+yarn install
+yarn serve
 ```
 
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
