@@ -13,3 +13,7 @@ yarn install
 yarn serve
 ```
 
+# Libraries used in this project
+
+Logo derived from [Gnome Adwaita icon theme](https://github.com/GNOME/adwaita-icon-theme) under GNU LGPL-v3 license.
+

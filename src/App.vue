@@ -3,8 +3,8 @@
     <section class="section is-medium has-text-centered">
       <div class="container">
         <img
-          alt="Vue logo"
-          src="./assets/logo.png"
+          alt="Screenger logo"
+          src="./assets/logo.svg"
         >
         <AudioUpload />
       </div>
