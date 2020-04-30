@@ -39,6 +39,7 @@ $footer-padding: 1rem;
 // Hide scroll bar unless it is needed
 html {
   overflow-y: auto;
+  scrollbar-width: thin;
 }
 
 // spacing

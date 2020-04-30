@@ -1,5 +1,12 @@
 <template>
   <div id="app">
+    <!-- Draw zone, showed when playing -->
+    <canvas
+      ref="canvas"
+      v-show="isPlaying"
+    ></canvas>
+
+    <!-- Welcome page -->
     <section class="hero is-fullheight">
       <div class="hero-body">
         <div class="container has-text-centered is-unselectable">
@@ -20,11 +27,8 @@
           </section>
         </div>
       </div>
-      <div class="hero-foot">
-        <AppFooter />
-      </div>
+      <AppFooter class="hero-foot"></AppFooter>
     </section>
-    <canvas id="canvas"></canvas>
   </div>
 </template>
 
@@ -37,6 +41,19 @@ import '@mdi/font/scss/materialdesignicons.scss'
 import './assets/main.scss'
 
 Vue.use(Buefy)
+
+function draw (canvas: HTMLCanvasElement) {
+  const ctx = canvas.getContext('2d')
+  const ymax = canvas.width
+  let val = 0
+  if (ctx) {
+    for (let x = 0; x < canvas.height; x++) {
+      val = (Math.sin(x * 440 * 3 / 10800) * 2 + 1) * 100
+      ctx.fillStyle = 'hsl(0,0%,' + val + '%)'
+      ctx.fillRect(0, x, ymax, x + 1)
+    }
+  }
+}
 
 export default Vue.extend({
   name: 'App',
@@ -63,7 +80,13 @@ export default Vue.extend({
     // When playing start or stop, activate canvas
     isPlaying: function (val: boolean) {
       if (val) {
+        // Fullscreen canvas
         document.documentElement.requestFullscreen()
+        this.$refs.canvas.width = window.screen.width
+        this.$refs.canvas.height = window.screen.height
+
+        // Draw initial canvas
+        draw(this.$refs.canvas)
       } else {
         document.exitFullscreen()
       }
@@ -87,15 +110,20 @@ export default Vue.extend({
       this.isLoading = false
       this.isPlaying = true
       this.audioElt.play()
-
-      // Warn, this is still WIP
-      this.$buefy.toast.open('This app is still in WIP')
     })
 
     // When song ended
     this.audioElt.addEventListener('ended', () => {
       this.isPlaying = false
       this.$buefy.toast.open('We hope you had fun while listening to your screen')
+    })
+
+    // Stop playing when fullscreen exists
+    document.addEventListener('fullscreenchange', () => {
+      if (document.fullscreenElement === null) {
+        this.isPlaying = false
+        this.audioElt.pause()
+      }
     })
   }
 })
