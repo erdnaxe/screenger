@@ -32,28 +32,22 @@ import Vue from 'vue'
 
 export default Vue.extend({
   name: 'AudioUpload',
+  props: ['isLoading'],
   data () {
     return {
-      dropFile: null,
-      isLoading: false
+      dropFile: null
     }
   },
   watch: {
     // On upload, check file the prompt confirmation
-    dropFile: function (val) {
+    dropFile: function (val: File) {
       const size = (val.size / 1024 / 1024).toFixed(2) // in MiB
-      const message = `Continue on '${val.name}' (${size} MB, ${val.type})?<br/>`
+      const message = `Play '${val.name}' (${size} MB, ${val.type})?<br/>`
+      const uri = URL.createObjectURL(val)
       this.$buefy.dialog.confirm({
         message: message,
-        onConfirm: () => (this.isLoading = true)
+        onConfirm: () => (this.$emit('input', uri))
       })
-    },
-
-    // When loading start alert user
-    isLoading: function (val) {
-      if (val) {
-        this.$buefy.toast.open('Loading…')
-      }
     }
   }
 })

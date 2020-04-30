@@ -1,0 +1,50 @@
+// Import Bulma's core
+@import "~bulma/sass/utilities/_all";
+
+// Custom colors
+$primary: #895ad6;
+$background: $grey-darker;
+$border: $grey-light;
+
+$body-background-color: darken($grey-darker, 4);
+$footer-background-color: $background;
+$button-background-color: $background;
+$button-border-color: lighten($button-background-color, 15);
+
+$title-color: #fff;
+$subtitle-color: $grey-light;
+$subtitle-strong-color: $grey-light;
+
+$text: #fff;
+$text-light: lighten($text, 10);
+$text-strong: darken($text, 5);
+
+$link: lighten($primary, 10);
+$link-hover: lighten($link, 5);
+$link-focus: darken($link, 5);
+$link-active: darken($link, 5);
+
+$button-color: $primary;
+$modal-card-body-background-color: darken($background, 5);
+$input-hover-color: $grey-light;
+$loading-background: $background;
+
+// Smaller footer
+$footer-padding: 1rem;
+
+// Import Bulma and Buefy styles
+@import "~bulma";
+@import "~buefy/src/scss/buefy";
+
+// Hide scroll bar unless it is needed
+html {
+  overflow-y: auto;
+}
+
+// spacing
+.mt-2 {
+  margin-top: 2em;
+}
+.mt-4 {
+  margin-top: 4em;
+}

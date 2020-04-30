@@ -7,13 +7,24 @@
             alt="Screenger logo"
             src="./assets/logo.svg"
           >
-          <AudioUpload class="mt-2" />
+          <AudioUpload
+            :disabled="isLoading"
+            @input="fileSelected"
+            class="mt-2"
+          />
+          <section class="content is-size-7 mt-4">
+            <h2>You are hearing nothing?</h2>
+            <p>
+              Maybe your screen is not affected by coil whine.
+            </p>
+          </section>
         </div>
       </div>
       <div class="hero-foot">
         <AppFooter />
       </div>
     </section>
+    <canvas id="canvas"></canvas>
   </div>
 </template>
 
@@ -23,66 +34,69 @@ import AppFooter from './components/AppFooter.vue'
 import AudioUpload from './components/AudioUpload.vue'
 import Buefy from 'buefy'
 import '@mdi/font/scss/materialdesignicons.scss'
+import './assets/main.scss'
 
 Vue.use(Buefy)
 
 export default Vue.extend({
   name: 'App',
+  data () {
+    return {
+      isLoading: false,
+      isPlaying: false,
+      screen: window.screen,
+      audioElt: new Audio()
+    }
+  },
   components: {
     AppFooter,
     AudioUpload
+  },
+  watch: {
+    // When loading start alert user
+    isLoading: function (val: boolean) {
+      if (val) {
+        this.$buefy.toast.open('Loading…')
+      }
+    },
+
+    // When playing start or stop, activate canvas
+    isPlaying: function (val: boolean) {
+      if (val) {
+        document.documentElement.requestFullscreen()
+      } else {
+        document.exitFullscreen()
+      }
+    }
+  },
+  methods: {
+    // On selection, start loading
+    fileSelected: function (val: string) {
+      this.isLoading = true
+
+      // revoke the older audio if exist
+      if (this.audioElt.src) {
+        URL.revokeObjectURL(this.audioElt.src)
+      }
+      this.audioElt.src = val
+    }
+  },
+  mounted () {
+    // When enough data is buffered, play!
+    this.audioElt.addEventListener('canplaythrough', () => {
+      this.isLoading = false
+      this.isPlaying = true
+      this.audioElt.play()
+
+      // Warn, this is still WIP
+      this.$buefy.toast.open('This app is still in WIP')
+    })
+
+    // When song ended
+    this.audioElt.addEventListener('ended', () => {
+      this.isPlaying = false
+      this.$buefy.toast.open('We hope you had fun while listening to your screen')
+    })
   }
 })
-
-document.title = 'Screenger - Make your screen sing'
 </script>
-
-<style lang="scss">
-// Import Bulma's core
-@import "~bulma/sass/utilities/_all";
-
-// Custom colors
-$primary: #895ad6;
-$background: $grey-darker;
-$border: $grey-light;
-
-$body-background-color: darken($grey-darker, 4);
-$footer-background-color: $background;
-$button-background-color: $background;
-$button-border-color: lighten($button-background-color, 15);
-
-$title-color: #fff;
-$subtitle-color: $grey-light;
-$subtitle-strong-color: $grey-light;
-
-$text: #fff;
-$text-light: lighten($text, 10);
-$text-strong: darken($text, 5);
-
-$link: lighten($primary, 10);
-$link-hover: lighten($link, 5);
-$link-focus: darken($link, 5);
-$link-active: darken($link, 5);
-
-$button-color: $primary;
-$modal-card-body-background-color: darken($background, 5);
-$input-hover-color: $grey-light;
-$loading-background: $background;
-
-// Smaller footer
-$footer-padding: 1rem;
-
-// Import Bulma and Buefy styles
-@import "~bulma";
-@import "~buefy/src/scss/buefy";
-
-// Hide scroll bar unless it is needed
-html {
-  overflow-y: auto;
-}
-
-// spacing
-.mt-2 {
-  margin-top: 2em;
-}
-</style>
