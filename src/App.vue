@@ -30,7 +30,8 @@
             <h2>You are hearing nothing?</h2>
             <p>
               Maybe your screen is not affected by coil whine.<br/>
-              Try to turn the brightness up and to listen in a quiet environment.
+              Try to turn the brightness up and listen in a quiet environment.<br/>
+              You can look up the known working panels <a href="https://github.com/erdnaxe/screenger/blob/master/README.md">here</a>, or contribute to this list <a href="https://github.com/erdnaxe/screenger/issues/new?title=%5Bworking%20panel%5D%20INSERT%20YOUR%20PANEL%20MODEL%20HERE">here</a>.
             </p>
           </section>
         </div>

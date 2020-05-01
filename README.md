@@ -17,3 +17,9 @@ yarn serve
 
 Logo derived from [Gnome Adwaita icon theme](https://github.com/GNOME/adwaita-icon-theme) under GNU LGPL-v3 license.
 
+# Statistics
+
+| Screen model          | Panel model           | Positive reports | Negative reports |
+|-----------------------|-----------------------|------------------|------------------|
+| Samsung S22D390Q      | unknown               | 1 (author)       | 0                |
+
