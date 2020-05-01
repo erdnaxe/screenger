@@ -16,13 +16,27 @@ TODO: calibrate samplerate
 import Vue from 'vue'
 
 function draw (canvas: HTMLCanvasElement, audioArray: Uint8Array) {
-  const ctx = canvas.getContext('2d')
+  // Get min and max for normalisation
+  let minValue = 128
+  let maxValue = 128
+  audioArray.forEach(element => {
+    if (element > maxValue) {
+      maxValue = element
+    } else if (element < minValue) {
+      minValue = element
+    }
+  })
+
+  // Get drawing zone sizes
   const xmax = Math.min(canvas.height, audioArray.length)
   const ymax = canvas.width
+
+  // Draw line by line
+  const ctx = canvas.getContext('2d')
   let val = 0
   if (ctx) {
     for (let x = 0; x < xmax; x++) {
-      val = Math.abs(audioArray[x] - 128) * 100 / 127 * 10
+      val = (audioArray[x] - minValue) / (maxValue - minValue) * 100
       ctx.fillStyle = 'hsl(0,0%,' + val + '%)'
       ctx.fillRect(0, x, ymax, x + 1)
     }

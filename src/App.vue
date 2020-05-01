@@ -26,19 +26,11 @@
               />
             </div>
           </div>
-          <section
-            class="content is-size-7 mt-4"
-            v-if="isLoading"
-          >
-            <h2>Loading...</h2>
-          </section>
-          <section
-            class="content is-size-7 mt-4"
-            v-else
-          >
+          <section class="content is-size-7 mt-4">
             <h2>You are hearing nothing?</h2>
             <p>
-              Maybe your screen is not affected by coil whine.
+              Maybe your screen is not affected by coil whine.<br/>
+              Try to turn the brightness up and to listen in a quiet environment.
             </p>
           </section>
         </div>
@@ -122,7 +114,6 @@ export default Vue.extend({
 
     // Connect audio context
     this.audioSource = this.audioContext.createMediaElementSource(this.audioElt)
-    this.audioSource.connect(this.audioContext.destination)
   }
 })
 </script>
