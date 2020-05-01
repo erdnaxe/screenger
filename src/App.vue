@@ -3,6 +3,7 @@
     <!-- Draw zone, showed when playing -->
     <AudioCanvas
       :active="isPlaying"
+      :audioContext="audioContext"
       @fullscreenExited="fullScreenExited"
     />
 
@@ -63,7 +64,8 @@ export default Vue.extend({
     return {
       isLoading: false,
       isPlaying: false,
-      audioElt: new Audio()
+      audioElt: new Audio(),
+      audioContext: new AudioContext()
     }
   },
   components: {
@@ -104,4 +106,8 @@ export default Vue.extend({
     })
   }
 })
+
+// TODO: audioContext.createMediaElementSource(audio)
+// puis .connect(audioAnalyser)
+// puis this.analyser.connect(ctx.destination)
 </script>
