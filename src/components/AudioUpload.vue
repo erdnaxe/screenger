@@ -8,7 +8,7 @@ Nice upload box that emit the audio file URI to the parent
       <b-upload
         v-model="dropFile"
         drag-drop
-        :disabled="isLoading"
+        :disabled="disabled"
         accept="audio/*"
       >
         <section class="section">
@@ -36,7 +36,7 @@ import Vue from 'vue'
 
 export default Vue.extend({
   name: 'AudioUpload',
-  props: ['isLoading'],
+  props: ['disabled'],
   data () {
     return {
       dropFile: null

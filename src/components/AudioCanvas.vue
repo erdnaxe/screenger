@@ -42,7 +42,9 @@ export default Vue.extend({
         }
       } else {
         // Desactivating canvas
-        document.exitFullscreen()
+        if (document.fullscreenElement !== null) {
+          document.exitFullscreen()
+        }
       }
     }
   },

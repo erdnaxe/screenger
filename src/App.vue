@@ -82,6 +82,7 @@ export default Vue.extend({
       }
       this.audioElt.src = val
     },
+
     // Stop player on fullscreen exit
     fullScreenExited: function () {
       this.isPlaying = false
