@@ -21,7 +21,7 @@
             </div>
             <div class="column is-4">
               <AudioUpload
-                :disabled="isLoading"
+                :isLoading="isLoading"
                 @input="fileSelected"
               />
             </div>

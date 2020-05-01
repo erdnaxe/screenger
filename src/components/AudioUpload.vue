@@ -8,8 +8,10 @@ Nice upload box that emit the audio file URI to the parent
       <b-upload
         v-model="dropFile"
         drag-drop
-        :disabled="disabled"
-        accept="audio/*"
+        :disabled="isLoading"
+        :loading="isLoading"
+        accept="audio/*,video/*"
+        type="is-info"
       >
         <section class="section">
           <div class="content has-text-centered">
@@ -36,7 +38,9 @@ import Vue from 'vue'
 
 export default Vue.extend({
   name: 'AudioUpload',
-  props: ['disabled'],
+  props: {
+    isLoading: Boolean
+  },
   data () {
     return {
       dropFile: null
@@ -44,14 +48,18 @@ export default Vue.extend({
   },
   watch: {
     // On upload, check file the prompt confirmation
-    dropFile: function (val: File) {
-      const size = (val.size / 1024 / 1024).toFixed(2) // in MiB
-      const message = `Play '${val.name}' (${size} MB, ${val.type})?<br/>`
-      const uri = URL.createObjectURL(val)
-      this.$buefy.dialog.confirm({
-        message: message,
-        onConfirm: () => (this.$emit('input', uri))
-      })
+    dropFile: function (val: (null | File)) {
+      if (val === null) {
+        this.$buefy.toast.open('This type of file was not recognised')
+      } else {
+        const size = (val.size / 1024 / 1024).toFixed(2) // in MiB
+        const message = `Play '${val.name}' (${size} MB, ${val.type})?<br/>`
+        const uri = URL.createObjectURL(val)
+        this.$buefy.dialog.confirm({
+          message: message,
+          onConfirm: () => (this.$emit('input', uri))
+        })
+      }
     }
   }
 })
