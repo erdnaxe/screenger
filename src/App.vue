@@ -4,6 +4,7 @@
     <AudioCanvas
       :active="isPlaying"
       :audioContext="audioContext"
+      @connect="connectAnalyser"
       @fullscreenExited="fullScreenExited"
     />
 
@@ -65,7 +66,8 @@ export default Vue.extend({
       isLoading: false,
       isPlaying: false,
       audioElt: new Audio(),
-      audioContext: new AudioContext()
+      audioContext: new AudioContext(),
+      audioSource: null as (null | MediaElementAudioSourceNode)
     }
   },
   components: {
@@ -83,6 +85,19 @@ export default Vue.extend({
         URL.revokeObjectURL(this.audioElt.src)
       }
       this.audioElt.src = val
+    },
+
+    // Connect audio analyser
+    connectAnalyser: function (analyser: AnalyserNode) {
+      if (this.audioSource === null) {
+        // Audio source is not initialized yet, wait a bit
+        setTimeout(() => {
+          this.connectAnalyser(analyser)
+        }, 1)
+      }
+      if (this.audioSource instanceof MediaElementAudioSourceNode) {
+        this.audioSource.connect(analyser)
+      }
     },
 
     // Stop player on fullscreen exit
@@ -104,10 +119,10 @@ export default Vue.extend({
       this.isPlaying = false
       this.$buefy.toast.open('We hope you had fun while listening to your screen')
     })
+
+    // Connect audio context
+    this.audioSource = this.audioContext.createMediaElementSource(this.audioElt)
+    this.audioSource.connect(this.audioContext.destination)
   }
 })
-
-// TODO: audioContext.createMediaElementSource(audio)
-// puis .connect(audioAnalyser)
-// puis this.analyser.connect(ctx.destination)
 </script>
