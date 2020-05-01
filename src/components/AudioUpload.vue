@@ -1,3 +1,7 @@
+<!--
+Nice upload box that emit the audio file URI to the parent
+-->
+
 <template>
   <section>
     <b-field>
