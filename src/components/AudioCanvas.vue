@@ -6,42 +6,12 @@ TODO: use WebGL shader
 -->
 
 <template>
-  <canvas
-    ref="canvas"
-    v-show="active"
-  ></canvas>
+  <div ref="pixi"></div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
-
-function draw (canvas: HTMLCanvasElement, audioArray: Uint8Array) {
-  // Get min and max for normalisation
-  let minValue = 128
-  let maxValue = 128
-  audioArray.forEach(element => {
-    if (element > maxValue) {
-      maxValue = element
-    } else if (element < minValue) {
-      minValue = element
-    }
-  })
-
-  // Get drawing zone sizes
-  const xmax = Math.min(canvas.height, audioArray.length)
-  const ymax = canvas.width
-
-  // Draw line by line
-  const ctx = canvas.getContext('2d')
-  let val = 0
-  if (ctx) {
-    for (let x = 0; x < xmax; x++) {
-      val = (audioArray[x] - minValue) / (maxValue - minValue) * 100
-      ctx.fillStyle = 'hsl(0,0%,' + val + '%)'
-      ctx.fillRect(0, x, ymax, x + 1)
-    }
-  }
-}
+import * as PIXI from 'pixi.js'
 
 export default Vue.extend({
   name: 'AudioCanvas',
@@ -58,7 +28,10 @@ export default Vue.extend({
 
     return {
       audioAnalyser: analyser,
-      audioArray: new Uint8Array(analyser.fftSize)
+      audioArray: new Uint8Array(analyser.fftSize),
+      textureArray: new Uint8Array(analyser.fftSize * 4),
+      pixiApp: new PIXI.Application(),
+      pixiSprite: new PIXI.Sprite()
     }
   },
   watch: {
@@ -66,27 +39,48 @@ export default Vue.extend({
       if (val) {
         // Activating fullscreen canvas
         document.documentElement.requestFullscreen()
-        if (this.$refs.canvas instanceof HTMLCanvasElement) {
-          this.$refs.canvas.width = window.screen.width
-          this.$refs.canvas.height = window.screen.height
+
+        // Mount renderer
+        if (this.$refs.pixi instanceof HTMLElement) {
+          this.$refs.pixi.appendChild(this.pixiApp.view)
         }
+
+        // Resize renderer to screen size
+        this.pixiSprite.width = window.screen.width
+        this.pixiApp.renderer.view.width = window.screen.width
+        this.pixiApp.renderer.view.height = window.screen.height
       } else {
         // Desactivating canvas
         if (document.fullscreenElement !== null) {
           document.exitFullscreen()
+        }
+
+        // Delete render view
+        if (this.$refs.pixi instanceof HTMLElement) {
+          this.$refs.pixi.removeChild(this.pixiApp.view)
         }
       }
     }
   },
   methods: {
     update: function () {
+      // Periodically called
+      requestAnimationFrame(this.update)
+
       if (this.active) {
+        // Get audio analyser output
         this.audioAnalyser.getByteTimeDomainData(this.audioArray)
-        window.requestAnimationFrame(() => {
-          if (this.$refs.canvas instanceof HTMLCanvasElement) {
-            draw(this.$refs.canvas, this.audioArray)
-          }
-        })
+
+        // Convert luminence to RGBA
+        for (const [i, e] of this.audioArray.entries()) {
+          this.textureArray[4 * i] = e
+          this.textureArray[4 * i + 1] = e
+          this.textureArray[4 * i + 2] = e
+          this.textureArray[4 * i + 3] = 255
+        }
+        const texture = PIXI.Texture.fromBuffer(this.textureArray, 1, window.screen.height)
+
+        this.pixiSprite.texture = texture
       }
     }
   },
@@ -101,8 +95,11 @@ export default Vue.extend({
     // Tell parent to connect
     this.$emit('connect', this.audioAnalyser)
 
-    // Periodically call update
-    setInterval(this.update, 30)
+    // Add sprite to renderer
+    this.pixiApp.stage.addChild(this.pixiSprite)
+
+    // Launch periodic update
+    this.update()
   }
 })
 </script>
