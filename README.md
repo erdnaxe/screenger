@@ -21,5 +21,8 @@ Logo derived from [Gnome Adwaita icon theme](https://github.com/GNOME/adwaita-ic
 
 | Screen model          | Panel model           | Positive reports | Negative reports |
 |-----------------------|-----------------------|------------------|------------------|
+| Samsung C27F390       | unknown               | 1                | 0                |
 | Samsung S22D390Q      | unknown               | 1 (author)       | 0                |
+| JVC LT-32HG62U        | unknown               | 0                | 1                |
+| Acer H223HQ           | unknown               | 0                | 1                |
 

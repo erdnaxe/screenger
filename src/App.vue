@@ -3,6 +3,7 @@
     <!-- Draw zone, showed when playing -->
     <AudioCanvas
       :active="isPlaying"
+      :fftSize="2048"
       :audioContext="audioContext"
       @connect="connectAnalyser"
       @fullscreenExited="fullScreenExited"
