@@ -1,8 +1,8 @@
 <!--
-This components draw a fullscreen canvas that will emit the correct noise
+This components draw a fullscreen canvas from an AudioAnalyser
 
-TODO: set fftSize
 TODO: calibrate samplerate
+TODO: use WebGL shader
 -->
 
 <template>
@@ -47,12 +47,18 @@ export default Vue.extend({
   name: 'AudioCanvas',
   props: {
     active: Boolean,
+    fftSize: Number,
     audioContext: AudioContext
   },
   data () {
+    // Create audio analyser and configure
+    const analyser = this.audioContext.createAnalyser()
+    analyser.fftSize = this.fftSize
+    analyser.smoothingTimeConstant = 0.4
+
     return {
-      audioAnalyser: null as (null | AnalyserNode),
-      audioArray: null as (null | Uint8Array)
+      audioAnalyser: analyser,
+      audioArray: new Uint8Array(analyser.fftSize)
     }
   },
   watch: {
@@ -74,13 +80,10 @@ export default Vue.extend({
   },
   methods: {
     update: function () {
-      if (this.active &&
-        this.audioAnalyser instanceof AnalyserNode &&
-        this.audioArray instanceof Uint8Array) {
+      if (this.active) {
         this.audioAnalyser.getByteTimeDomainData(this.audioArray)
         window.requestAnimationFrame(() => {
-          if (this.$refs.canvas instanceof HTMLCanvasElement &&
-            this.audioArray instanceof Uint8Array) {
+          if (this.$refs.canvas instanceof HTMLCanvasElement) {
             draw(this.$refs.canvas, this.audioArray)
           }
         })
@@ -94,12 +97,6 @@ export default Vue.extend({
         this.$emit('fullscreenExited')
       }
     })
-
-    // Init audio analyser and array
-    this.audioAnalyser = this.audioContext.createAnalyser()
-    this.audioAnalyser.fftSize = 2048
-    this.audioAnalyser.smoothingTimeConstant = 0.4
-    this.audioArray = new Uint8Array(this.audioAnalyser.fftSize)
 
     // Tell parent to connect
     this.$emit('connect', this.audioAnalyser)

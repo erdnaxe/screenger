@@ -16,11 +16,7 @@ Nice upload box that emit the audio file URI to the parent
         <section class="section">
           <div class="content has-text-centered">
             <p>
-              <b-icon
-                icon="download"
-                size="isLoading: false-large"
-              >
-              </b-icon>
+              <b-icon icon="download" />
             </p>
             <p>
               Drop your songs here<br />
