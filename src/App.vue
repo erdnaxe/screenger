@@ -48,7 +48,6 @@ import AppFooter from './components/AppFooter.vue'
 import AudioCanvas from './components/AudioCanvas.vue'
 import AudioUpload from './components/AudioUpload.vue'
 import Buefy from 'buefy'
-import '@mdi/font/scss/materialdesignicons.scss'
 import './assets/main.scss'
 
 Vue.use(Buefy)
