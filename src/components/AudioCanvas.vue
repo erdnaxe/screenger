@@ -30,7 +30,7 @@ export default Vue.extend({
       audioAnalyser: analyser,
       audioArray: new Uint8Array(analyser.fftSize),
       textureArray: new Uint8Array(analyser.fftSize * 4),
-      pixiApp: new PIXI.Application(),
+      pixiApp: new PIXI.Application({ resizeTo: window }),
       pixiSprite: new PIXI.Sprite()
     }
   },
@@ -45,10 +45,8 @@ export default Vue.extend({
           this.$refs.pixi.appendChild(this.pixiApp.view)
         }
 
-        // Resize renderer to screen size
+        // Resize sprite to screen size
         this.pixiSprite.width = window.screen.width
-        this.pixiApp.renderer.view.width = window.screen.width
-        this.pixiApp.renderer.view.height = window.screen.height
       } else {
         // Desactivating canvas
         if (document.fullscreenElement !== null) {
